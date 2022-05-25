@@ -15,7 +15,7 @@
           item
         }}</b-dropdown-item>
       </b-dropdown>
-      <b-button @click="onBuy('args')">Купить</b-button>
+      <b-button @click="onBuy(cardData)">Купить</b-button>
     </b-card>
   </b-container>
 </template>

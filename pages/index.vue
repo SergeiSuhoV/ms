@@ -1,13 +1,21 @@
 <template>
-  <m-product-card
-  :cardData="dt"
-  ></m-product-card>
+  <div>
+    <m-product-card :cardData="dt"></m-product-card>
+    <button @click="openPopup">open popup</button>
+    <m-popup :isOpen="isPopupOpened" @onClose="closePopup">
+      <!-- содержание попапа -->
+      
+      <div>form</div>
+    </m-popup>
+  </div>
 </template>
 
 <script>
-import MProductCard from '../components/MProductCard.vue';
+import MProductCard from "../components/MProductCard.vue";
+import MPopup from "../components/MPopup.vue";
+
 export default {
-  components: { MProductCard },
+  components: { MProductCard, MPopup },
   name: "IndexPage",
 
   data() {
@@ -68,8 +76,19 @@ export default {
           { name: "Количество", code: "count", value: 1 },
         ],
       },
+      // popup
+      isPopupOpened: false,
+      dataForm: [],
     };
   },
-  
+
+  methods: {
+    openPopup() {
+      this.isPopupOpened = true;
+    },
+    closePopup() {
+      this.isPopupOpened = false;
+    },
+  },
 };
 </script>
