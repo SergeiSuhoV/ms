@@ -44,8 +44,10 @@ export default {
 
   methods: {
     onBuy(ctx) {
-      console.log("buy");
-      console.log(ctx)
+      const {card} = {test: "test"}
+      const {colorSelected} = {color: "red"}
+
+      this.$emit("add-to-order-form", ctx);
     },
   },
 };

@@ -1,10 +1,13 @@
 <template>
   <div>
-    <m-product-card :cardData="dt"></m-product-card>
+    <m-product-card
+      :cardData="dt"
+      @add-to-order-form="openOrderForm"
+    ></m-product-card>
     <button @click="openPopup">open popup</button>
     <m-popup :isOpen="isPopupOpened" @onClose="closePopup">
       <!-- содержание попапа -->
-      
+      <m-order-form :dataForm="dataForm"></m-order-form>
       <div>form</div>
     </m-popup>
   </div>
@@ -13,9 +16,10 @@
 <script>
 import MProductCard from "../components/MProductCard.vue";
 import MPopup from "../components/MPopup.vue";
+import MOrderForm from "../components/MOrderForm.vue";
 
 export default {
-  components: { MProductCard, MPopup },
+  components: { MProductCard, MPopup, MOrderForm },
   name: "IndexPage",
 
   data() {
@@ -83,6 +87,10 @@ export default {
   },
 
   methods: {
+    openOrderForm(data) {
+      this.dataForm = data;
+      this.openPopup();
+    },
     openPopup() {
       this.isPopupOpened = true;
     },
