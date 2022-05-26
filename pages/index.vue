@@ -1,13 +1,15 @@
 <template>
   <div>
     <m-product-card
-      :cardData="dt"
+      :cardData="card"
       @add-to-order-form="openOrderForm"
     ></m-product-card>
-    <button @click="openPopup">open popup</button>
     <m-popup :isOpen="isPopupOpened" @onClose="closePopup">
       <!-- содержание попапа -->
-      <m-order-form :dataForm="dataForm"></m-order-form>
+      <m-order-form
+        :dataForm="dataForm"
+        @submiting-data="sendOrderForm"
+      ></m-order-form>
       <div>form</div>
     </m-popup>
   </div>
@@ -25,7 +27,7 @@ export default {
   data() {
     return {
       // mocks
-      dt: {
+      card: {
         unitCode: "150895",
         unitPrice: "245300.00",
         name: "AURUM C7.2",
@@ -91,10 +93,15 @@ export default {
       this.dataForm = data;
       this.openPopup();
     },
+    statusSending() {},
     openPopup() {
       this.isPopupOpened = true;
     },
     closePopup() {
+      this.isPopupOpened = false;
+    },
+    sendOrderForm(data) {
+      console.log(data);
       this.isPopupOpened = false;
     },
   },

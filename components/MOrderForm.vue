@@ -9,7 +9,7 @@
         >Цена за 1шт: {{ dataForm.unitPrice }}</b-list-group-item
       >
     </b-list-group>
-    <b-form @submit.stop.prevent="onSubmit" id="">
+    <b-form @submit.stop.prevent="onSubmit" id="form-submit">
       <!-- Поле ФИО -->
       <div role="name">
         <label for="input-fields-fullName">Ваше имя полностью:</label>
@@ -65,15 +65,34 @@
           :options="dataColorSelect.options"
         ></b-form-select>
       </div>
-
+      <!-- Слайдер -->
+      <div role="select-total">
+        <label for="slider-total">Количество: {{ fields.totalCount }}</label>
+        <vue-slider
+          :clickable="false"
+          v-model="fields.totalCount"
+          :min="sliderOptions.min"
+          :max="sliderOptions.max"
+        ></vue-slider>
+      </div>
       <!-- отправка формы -->
+      <!-- TODO: Отключить кнопку, если валидация не проходит -->
       <b-button type="submit" variant="primary">Оформить</b-button>
     </b-form>
   </div>
 </template>
 
 <script>
+// слайдер
+import VueSlider from "vue-slider-component/dist-css/vue-slider-component.umd.min.js";
+import "vue-slider-component/dist-css/vue-slider-component.css";
+// import theme
+import "vue-slider-component/theme/default.css";
+
 export default {
+  components: {
+    VueSlider,
+  },
   props: {
     dataForm: {
       type: Object,
@@ -82,14 +101,13 @@ export default {
   },
   data() {
     return {
-      errors: [],
       fields: {
         email: "",
         fullName: "",
         address: "",
         delivery: "",
         colorSelected: "",
-        totalCount: "",
+        totalCount: 1,
       },
       dataColorSelect: {
         selected: { value: null, text: "Пожалуйста, выберите опцию" },
@@ -98,13 +116,35 @@ export default {
           { value: "Красный", text: "Красный" },
         ],
       },
+      submitValid: true,
+      // slider data
+      sliderOptions: {
+        min: 0,
+        max: 10,
+      },
     };
   },
   methods: {
     isEmpty(str) {
       return str.trim() === "";
     },
+
+    resetForm() {
+      this.fields.email = "";
+      this.fields.fullName = "";
+      this.fields.address = "";
+      this.fields.delivery = "";
+      this.fields.colorSelected = "";
+      this.fields.totalCount = "";
+    },
+
+    onSubmit() {
+      console.log("first");
+      this.$emit("submiting-data", this.fields);
+      this.resetForm();
+    },
   },
+
   computed: {
     fullNameState() {
       // TODO: Составить регулярку по ТЗ
