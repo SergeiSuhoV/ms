@@ -172,8 +172,5 @@ export default {
       content: "\20BD";
     }
   }
-
-  @media (max-width: 480px) {
-  }
 }
 </style>
