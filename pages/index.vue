@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <b-container >
     <m-product-card
       :cardData="card"
       @add-to-order-form="openOrderForm"
@@ -12,7 +12,7 @@
       ></m-order-form>
       <div>form</div>
     </m-popup>
-  </div>
+  </b-container>
 </template>
 
 <script>

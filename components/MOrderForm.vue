@@ -149,6 +149,7 @@ export default {
     fullNameState() {
       // TODO: Составить регулярку по ТЗ
       const reg = /^(?=.{1,40}$)[а-яёА-ЯЁ]+(?:[-' ][а-яёА-ЯЁ]+)*$/;
+      
       return reg.test(this.fields.fullName);
     },
 
