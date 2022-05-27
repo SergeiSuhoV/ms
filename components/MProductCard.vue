@@ -3,8 +3,8 @@
     <div class="m-product-card m-auto">
       <span class="m-product-card__head">
         <div class="m-product-card__head-wrapper">
-          <h2 class="m-product-card__head-brand">name</h2>
-          <h2 class="m-product-card__head-name">brand</h2>
+          <h2 class="m-product-card__head-brand">{{ cardData.brand }}</h2>
+          <h2 class="m-product-card__head-name">{{ cardData.name }}</h2>
         </div>
       </span>
       <div class="m-product-card__body">
@@ -27,14 +27,22 @@
                 <div>{{ item.value }}</div></b-list-group-item
               >
             </b-list-group>
-            <b-dropdown id="dropdown-color" text="выбор цвета" class="m-md-2">
+            <b-dropdown
+              id="dropdown-color"
+              text="выбор цвета"
+              size="lg"
+              class="w-100 my-3"
+            >
               <b-dropdown-item
                 v-for="(item, i) of getParametersColor"
                 :key="i"
+                size="lg"
                 >{{ item }}</b-dropdown-item
               >
             </b-dropdown>
-            <div class="m-product-card__body-price">Цена {{'000'}}</div>
+            <div class="m-product-card__body-price">
+              Цена {{ cardData.unitPrice }}
+            </div>
             <b-button
               class="w-100 my-5"
               size="lg"
@@ -46,33 +54,6 @@
         </div>
       </div>
     </div>
-    <!-- <b-row class="m-auto" md="3" xs="2">
-      <b-col>
-        <b-card >
-          
-        </b-card>
-      </b-col>
-      <b-col>text</b-col>
-    </b-row> -->
-
-    <!-- <b-card
-      :title="cardData.name"
-      img-src="../static/norco_aurum_c72_2016_1.jpg"
-      tag="article"
-      style="max-width: 20rem;"
-    >
-      <b-list-group>
-        <b-list-group-item v-for="(item, i) of getProperties" :key="i"
-          >{{ item.name }} -- {{ item.value }}</b-list-group-item
-        >
-      </b-list-group>
-      <b-dropdown id="dropdown-color" text="выбор цвета" class="m-md-2">
-        <b-dropdown-item v-for="(item, i) of getParametersColor" :key="i">{{
-          item
-        }}</b-dropdown-item>
-      </b-dropdown>
-      <b-button @click="onBuy(cardData)">Купить</b-button>
-    </b-card> -->
   </b-container>
 </template>
 
@@ -129,10 +110,25 @@ export default {
         flex-direction: column;
       }
     }
+
+    &-brand {
+      margin: 0 10px 0 0;
+    }
+    &-name {
+    font-weight: 700;
+    }
   }
 
   &__body {
     width: 100%;
+
+    &-description {
+      width: 100%;
+
+      @media (max-width: 480px) {
+        max-width: 400px;
+      }
+    }
 
     &-wrapper {
       display: flex;
@@ -146,12 +142,13 @@ export default {
     }
 
     &-image {
-      border: 1px solid #d7d7d7;
       width: 100%;
       max-width: 400px;
       max-height: 230px;
       margin: 0 30px 0 0;
       object-fit: contain;
+      border: 1px solid #d7d7d7;
+      border-radius: 3px;
 
       @media (max-width: 480px) {
         margin: 0 auto;
@@ -171,12 +168,8 @@ export default {
       }
     }
 
-    &-description {
-      width: 100%;
-
-      @media (max-width: 480px) {
-        max-width: 400px;
-      }
+    &-price:after {
+      content: "\20BD";
     }
   }
 
