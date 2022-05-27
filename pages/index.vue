@@ -1,33 +1,40 @@
 <template>
-  <b-container >
+  <b-container>
     <m-product-card
-      :cardData="card"
+      :cardData="cardData"
       @add-to-order-form="openOrderForm"
     ></m-product-card>
-    <m-popup :isOpen="isPopupOpened" @onClose="closePopup">
-      <!-- содержание попапа -->
-      <m-order-form
-        :dataForm="dataForm"
-        @submiting-data="sendOrderForm"
-      ></m-order-form>
-      <div>form</div>
-    </m-popup>
   </b-container>
 </template>
 
 <script>
 import MProductCard from "../components/MProductCard.vue";
-import MPopup from "../components/MPopup.vue";
 import MOrderForm from "../components/MOrderForm.vue";
 
 export default {
-  components: { MProductCard, MPopup, MOrderForm },
+  components: { MProductCard, MOrderForm },
   name: "IndexPage",
 
-  data() {
-    return {
-      // mocks
-      card: {
+  methods: {
+    openOrderForm(data) {
+      console.log(data);
+      // Будем юзать vuex
+      this.$store.commit("cardSelected/setCardSelected", data);
+      this.$router.push({ path: "order" });
+    },
+    statusSending() {},
+
+    sendOrderForm(data) {
+      console.log(data);
+      this.isPopupOpened = false;
+    },
+    tst() {
+      this.$store.card.dispatch("addCard");
+    },
+  },
+  computed: {
+    cardData() {
+      return {
         unitCode: "150895",
         unitPrice: "245300.00",
         name: "AURUM C7.2",
@@ -81,28 +88,7 @@ export default {
           },
           { name: "Количество", code: "count", value: 1 },
         ],
-      },
-      // popup
-      isPopupOpened: false,
-      dataForm: [],
-    };
-  },
-
-  methods: {
-    openOrderForm(data) {
-      this.dataForm = data;
-      this.openPopup();
-    },
-    statusSending() {},
-    openPopup() {
-      this.isPopupOpened = true;
-    },
-    closePopup() {
-      this.isPopupOpened = false;
-    },
-    sendOrderForm(data) {
-      console.log(data);
-      this.isPopupOpened = false;
+      };
     },
   },
 };

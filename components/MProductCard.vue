@@ -1,5 +1,6 @@
 <template>
   <b-container fluid class="m-auto">
+    <template v-if="cardData">
     <div class="m-product-card m-auto">
       <span class="m-product-card__head">
         <div class="m-product-card__head-wrapper">
@@ -54,6 +55,7 @@
         </div>
       </div>
     </div>
+    </template>
   </b-container>
 </template>
 
