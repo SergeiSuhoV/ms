@@ -1,6 +1,6 @@
 <template>
   <span class="m-dialog-status">
-    <div v-if="isStatus" class="m-dialog-status_accept">Ваша заявка ОКЕЙ</div>
+    <div v-if="isStatus" class="m-dialog-status_accept">Ваша заявка принята! Ожидайте свою пулю, самолет, пушку, ракету</div>
     <div v-else class="m-dialog-status_error">Ошибка оформления заявки!</div>
   </span>
 </template>
@@ -21,12 +21,14 @@ export default {
   width: 100%;
   max-width: 300px;
   height: 200px;
+  padding: 10px;
   background-color: white;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 900;
+  
 
   &_accept {
     color: green;
