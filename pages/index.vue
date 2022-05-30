@@ -17,7 +17,6 @@ export default {
 
   methods: {
     openOrderForm(data) {
-      console.log(data);
       // Будем юзать vuex
       this.$store.commit("cardSelected/setCardSelected", data);
       this.$router.push({ path: "order" });
@@ -25,7 +24,6 @@ export default {
     statusSending() {},
 
     sendOrderForm(data) {
-      console.log(data);
       this.isPopupOpened = false;
     },
     tst() {
