@@ -62,25 +62,24 @@
         <label for="input-fields-delivery" class="mb-1"
           >Интервал доставки:</label
         >
-        <b-form-input
-          v-model="fields.delivery"
-          :state="deliveriState"
-          class="mb-3"
-        ></b-form-input>
+        <b-form-select
+          v-model="dataDeliverySelected.selected"
+          :options="dataDeliverySelected.options"
+          size="sm"
+          class="mt-3"
+        ></b-form-select>
       </div>
       <!-- Поле выбранный цвет -->
       <div role="color-selected">
-        <label
-          for="input-fields-select"
-          class="mb-1"
-          :v-model="dataColorSelect.selected"
-          >Выбранный цвет:</label
-        >
+        <label for="input-fields-select" class="mb-1">Выбранный цвет:</label>
         <b-form-select
-          :options="dataColorSelect.options"
-          class="mb-3"
+          v-model="dataColorSelected.selected"
+          :options="dataColorSelected.options"
+          size="sm"
+          class="mt-3"
         ></b-form-select>
       </div>
+
       <!-- Слайдер -->
       <div role="select-total">
         <label for="slider-total">Количество: {{ fields.totalCount }}</label>
@@ -97,9 +96,7 @@
       <b-button
         type="submit"
         variant="primary"
-        :disabled="
-          !fullNameState || !emailState || !addressState || !deliveriState
-        "
+        :disabled="!fullNameState || !emailState || !addressState"
         >Оформить</b-button
       >
     </b-form>
@@ -129,18 +126,15 @@ export default {
         email: "",
         fullName: "",
         address: "",
-        delivery: "",
-        colorSelected: "",
         totalCount: 1,
       },
-      dataColorSelect: {
-        selected: {},
-        options: [
-          // подгрузить из выбранной карточки
-          { value: "Красный", text: "Красный" },
-          { value: "Красный", text: "Красный" },
-          { value: "Красный", text: "Красный" },
-        ],
+      dataColorSelected: {
+        selected: null,
+        options: [],
+      },
+      dataDeliverySelected: {
+        selected: null,
+        options: [],
       },
       submitValid: true,
       // slider data
@@ -150,6 +144,37 @@ export default {
       },
     };
   },
+
+  mounted() {
+    // Получим периоды доставки
+    const deliveryPeriods = this.dataForm.parameters
+      .filter((delivery) => delivery.code === "delivery")
+      .map((el) => {
+        return {
+          value: el,
+          text: el,
+        };
+      });
+
+    // Значению для полей доставки и выбранного цвета
+    this.dataColorSelected.options = [
+      {
+        value: null,
+        text: this.dataForm.colorSelected,
+      },
+    ]; //TODO: немного получилось хардкорно с явным указанием элемента массива, какие варианты?
+    this.dataDeliverySelected.options = [
+      this.dataForm.parameters
+        .filter((del) => del.code === "delivery")[0]
+        .value.map((el) => {
+          return {
+            value: el,
+            text: el,
+          };
+        }),
+    ];
+  },
+
   methods: {
     isEmpty(str) {
       return str.trim() === "";
@@ -159,16 +184,14 @@ export default {
       this.fields.email = "";
       this.fields.fullName = "";
       this.fields.address = "";
-      this.fields.delivery = "";
-      this.fields.colorSelected = "";
       this.fields.totalCount = "";
     },
 
     onSubmit() {
-      console.log("first");
       this.$emit("submiting-data", {
         ...this.fields,
-        ...this.dataColorSelect.select,
+        colorSelected: this.dataForm.colorSelected,
+        // ...this.dataDeliverySelected.selected,
       });
       this.resetForm();
     },
@@ -194,6 +217,11 @@ export default {
 
     deliveriState() {
       return !this.isEmpty(this.fields.delivery);
+    },
+    colorSelectedState() {
+      return this.dataForm.colorSelected !== null
+        ? this.dataColorSelect.colorSelected
+        : false;
     },
   },
 };

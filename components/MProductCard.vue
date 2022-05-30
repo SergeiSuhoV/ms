@@ -1,60 +1,62 @@
 <template>
   <b-container fluid class="m-auto">
     <template v-if="cardData">
-    <div class="m-product-card m-auto">
-      <span class="m-product-card__head">
-        <div class="m-product-card__head-wrapper">
-          <h2 class="m-product-card__head-brand">{{ cardData.brand }}</h2>
-          <h2 class="m-product-card__head-name">{{ cardData.name }}</h2>
-        </div>
-      </span>
-      <div class="m-product-card__body">
-        <div class="m-product-card__body-wrapper">
-          <img
-            src="../static/norco_aurum_c72_2016_1.jpg"
-            class="m-product-card__body-image"
-          />
-          <div class="m-product-card__body-description">
-            <b-list-group>
-              <b-list-group-item
-                class="m-product-card__body-list"
-                v-for="(item, i) of getProperties"
-                :key="i"
-              >
-                <div class="m-product-card__body-list-item">
-                  {{ item.name }}{{ `:` }}
-                </div>
+      <div class="m-product-card m-auto">
+        <span class="m-product-card__head">
+          <div class="m-product-card__head-wrapper">
+            <h2 class="m-product-card__head-brand">{{ cardData.brand }}</h2>
+            <h2 class="m-product-card__head-name">{{ cardData.name }}</h2>
+          </div>
+        </span>
+        <div class="m-product-card__body">
+          <div class="m-product-card__body-wrapper">
+            <img
+              src="../static/norco_aurum_c72_2016_1.jpg"
+              class="m-product-card__body-image"
+            />
+            <div class="m-product-card__body-description">
+              <b-list-group>
+                <b-list-group-item
+                  class="m-product-card__body-list"
+                  v-for="(item, i) of getProperties"
+                  :key="i"
+                >
+                  <div class="m-product-card__body-list-item">
+                    {{ item.name }}{{ `:` }}
+                  </div>
 
-                <div>{{ item.value }}</div></b-list-group-item
-              >
-            </b-list-group>
-            <b-dropdown
-              id="dropdown-color"
-              text="выбор цвета"
-              size="lg"
-              class="w-100 my-3"
-            >
-              <b-dropdown-item
-                v-for="(item, i) of getParametersColor"
-                :key="i"
+                  <div>{{ item.value }}</div></b-list-group-item
+                >
+              </b-list-group>
+              <b-dropdown
+                id="dropdown-color"
+                :text="colorSelected"
                 size="lg"
-                >{{ item }}</b-dropdown-item
+                class="w-100 my-3"
               >
-            </b-dropdown>
-            <div class="m-product-card__body-price">
-              Цена {{ cardData.unitPrice }}
+              <!-- //TODO: немного получилось хардкорно с явным указанием элемента массива, какие варианты? -->
+                <b-dropdown-item
+                  v-for="(item, i) of getParametersColor[0].value"
+                  :key="i"
+                  size="lg"
+                  @click="onChangeColor(item)"
+                  >{{ item }}</b-dropdown-item
+                >
+              </b-dropdown>
+              <div class="m-product-card__body-price">
+                Цена {{ cardData.unitPrice }}
+              </div>
+              <b-button
+                class="w-100 my-5"
+                size="lg"
+                variant="danger"
+                @click="onBuy({...cardData, colorSelected: colorSelected})"
+                >Купить</b-button
+              >
             </div>
-            <b-button
-              class="w-100 my-5"
-              size="lg"
-              variant="danger"
-              @click="onBuy(cardData)"
-              >Купить</b-button
-            >
           </div>
         </div>
       </div>
-    </div>
     </template>
   </b-container>
 </template>
@@ -67,26 +69,33 @@ export default {
       default: null,
     },
   },
+  data() {
+    return {
+      colorSelected: "Выбор цвета",
+    };
+  },
   computed: {
     getProperties() {
       return this.cardData.properties;
     },
-    getParametersColor() {
-      //TODO: немного получилось хардкорно с явным указанием элемента массива, по хорошему как-то переделать нужно
+    getParametersColor() {      
       const colors = this.cardData.parameters.filter(
         (el) => el.code === "color"
-      )[0].value;
+      );
 
       return colors;
+    },
+    getTextColor() {
+      return this.colorSelected;
     },
   },
 
   methods: {
-    onBuy(ctx) {
-      const { card } = { test: "test" };
-      const { colorSelected } = { color: "red" };
-
-      this.$emit("add-to-order-form", ctx);
+    onChangeColor(color) {
+      this.colorSelected = color;
+    },
+    onBuy(selected) {
+      this.$emit("add-to-order-form", selected);
     },
   },
 };
@@ -117,7 +126,7 @@ export default {
       margin: 0 10px 0 0;
     }
     &-name {
-    font-weight: 700;
+      font-weight: 700;
     }
   }
 
